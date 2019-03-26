@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+</head>
+
+<body>
+  <canvas id="canvas" width="1200" height="700"></canvas>
+</body>
+<script type="text/javascript">
+  let data = [{
+    name: '土豆',
+    num: 200,
+  }, {
+    name: '西瓜',
+    num: 80,
+  }, {
+    name: '黄瓜',
+    num: 85,
+  }, {
+    name: '粉丝',
+    num: 70,
+  }, {
+    name: '苹果',
+    num: 75,
+  }, {
+    name: '香蕉',
+    num: 30,
+  }, {
+    name: '樱桃',
+    num: 5,
+  }, {
+    name: '橙子',
+    num: 100,
+  }, {
+    name: '梨',
+    num: 80,
+  }, {
+    name: '菠菜',
+    num: 85,
+  }, {
+    name: '西红柿',
+    num: 70,
+  }, {
+    name: '大白菜',
+    num: 75,
+  }, {
+    name: '西蓝花',
+    num: 30,
+  }];
+
+  let canvas = document.querySelector('#canvas');
+  let ctx = canvas.getContext('2d');
+  let total = 0;
+  let ball = {};
+  let balls = [];
+  data.forEach(d => {
+    total += d.num;
+  });
+
+  canvas.addEventListener('click', function(e) {
+    let clickBall = findCircle({
+      x: e.x,
+      y: e.y,
+      r: 5
+    });
+    console.log(clickBall.data);
+  })
+
+  // 为当前的所有数据都随机出来一个圆心位置并且 判断是否有重叠圆
+  data.forEach(d => {
+    // 算出当前圆的合适的半径
+    let r = (canvas.height * (d.num / total))
+    // 随机出来一个圆心位置
+    let ball = randomPrefix();
+    // 循环计数器 防止死循环
+    let count = 0;
+    //每个圆只生成200次
+    while (findCircle({
+        x: ball.x,
+        y: ball.y,
+        r: r
+      }) && count < 200) {
+      ball = randomPrefix();
+      count++;
+    }
+
+    // 记录圆的半径和圆的元数据
+    ball.r = r;
+    ball.data = d;
+    // 将生成的新圆放入数据中 下次检查是否重叠和绘制时使用
+    balls.push(ball);
+  })
+
+  draw();
+
+  function draw() {
+    // 遍历圆数组画圆
+    balls.forEach(ball => {
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, ball.r, 0, 2 * Math.PI);
+      // 给圆填充颜色
+      ctx.fillStyle = randomColor();
+      ctx.fill();
+      // 将数据中的name显示在圆上
+      ctx.fillStyle = '#fff';
+      ctx.fillText(ball.data.name, ball.x - ball.r / 2, ball.y)
+      ctx.stroke();
+    })
+  }
+
+  function randomColor() {
+    return `rgba(${Math.floor(Math.random() * 256)},
+         ${Math.floor(Math.random() * 256)},
+         ${Math.floor(Math.random() * 256)})`;
+  }
+
+  function randomPrefix() {
+    let x = 0;
+    let y = 0;
+    x = 80 + Math.random() * (canvas.width - 160);
+    y = 80 + Math.random() * (canvas.height - 160);
+    return {
+      x,
+      y
+    }
+  }
+
+  // 传入坐标和半径 在圆数组中找到与之重叠的那个圆
+  function findCircle(circle) {
+    var len = balls.length;
+    let axiosBall;
+    for (var i = 0; i < len; i++) {
+      var x1 = balls[i].x;
+      var y1 = balls[i].y;
+      var r1 = balls[i].r;
+      var x2 = circle.x;
+      var y2 = circle.y;
+      var r2 = circle.r;
+      if ((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) < (r2 + r1) * (r2 + r1)) {
+        axiosBall = balls[i];
+        break;
+      }
+    }
+    return axiosBall;
+  }
+</script>
+
+</html>

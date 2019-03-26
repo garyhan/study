@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <style media="screen">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    #oc {
+      border: 1px solid #000;
+      display: block;
+    }
+  </style>
+</head>
+
+
+<body>
+  <canvas id="oc" width="1280" height="680"></canvas>
+</body>
+<script src="./js/circle.js" charset="utf-8"></script>
+<script>
+  let data = [{
+    name: '土豆',
+    num: 200,
+  }, {
+    name: '西瓜',
+    num: 80,
+  }, {
+    name: '黄瓜',
+    num: 85,
+  }, {
+    name: '粉丝',
+    num: 70,
+  }, {
+    name: '苹果',
+    num: 75,
+  }, {
+    name: '香蕉',
+    num: 30,
+  }, {
+    name: '樱桃',
+    num: 5,
+  }, {
+    name: '橙子',
+    num: 100,
+  }, {
+    name: '梨',
+    num: 80,
+  }, {
+    name: '菠菜',
+    num: 85,
+  }, {
+    name: '西红柿',
+    num: 70,
+  }, {
+    name: '大白菜',
+    num: 75,
+  }, {
+    name: '西蓝花',
+    num: 30,
+  }];
+
+  new DrawCircle({
+    data,
+    el: '#oc'
+  });
+</script>
+
+</html>
